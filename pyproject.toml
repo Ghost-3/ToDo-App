@@ -1,0 +1,37 @@
+[project]
+name = "todo_app"
+version = "0.0.1"
+requires-python = ">=3.12"
+dependencies = ["flet"]
+
+[project.optional-dependencies]
+dev = ["ruff", "basedpyright"]
+
+# Linters config
+
+# PyRight
+[tool.basedpyright]
+venvPath = ".venv"
+typeCheckingMode = "all"
+reportUnusedImport = "none"     # Ruff
+reportMissingSuperCall = "none"
+reportUnusedCallResult = "none"
+reportMissingTypeStubs = "none"
+
+# Ruff
+[tool.ruff]
+line-length = 120
+preview = true
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "ANN101", # missing-type-self (deprecated)
+    "ANN102", # missing-type-cls (deprecated)
+    "CPY001", # missing-copyright-notice
+]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"__init__.py" = [
+    "F401", # unused-import
+]
