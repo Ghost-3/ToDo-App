@@ -6,11 +6,13 @@ import json
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from .task import Task, TaskDict
+from .task import Task
 
 if TYPE_CHECKING:
     from datetime import datetime
     from os import PathLike
+
+    from .task_dict import TaskDict
 
 
 class TaskManager:

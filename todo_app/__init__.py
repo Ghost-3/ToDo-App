@@ -1,3 +1,3 @@
 """Main module."""
 
-from .ui import App
+from .ui.app import App

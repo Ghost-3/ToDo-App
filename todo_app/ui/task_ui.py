@@ -17,7 +17,7 @@ from flet import (
     icons,
 )
 
-from todo_app.todo_logic import Task
+from todo_app.todo_logic.task import Task
 
 from .task_event import TaskEvent
 
@@ -36,7 +36,7 @@ class TaskUi(UserControl):
         :param task_status_change: A callback function for handling status changes of the task.
         :param task_delete: A callback function for deleting the task.
         """
-        super().__init__()  # type: ignore (Bad library typing)
+        super().__init__()  # type: ignore[reportUnknownMemberType] (Bad library typing)
         self._task = task
 
         self.on_task_event = on_task_event
@@ -91,7 +91,7 @@ class TaskUi(UserControl):
         return self._task
 
     @override
-    def build(self) -> Column:  # type: ignore (Bad library typing)
+    def build(self) -> Column:  # type: ignore[reportIncompatibleMethodOverride] (Bad library typing)
         return Column(controls=[self.display_view, self.edit_view])
 
     def edit_clicked(self, _: ControlEvent) -> None:
@@ -99,7 +99,7 @@ class TaskUi(UserControl):
 
         :param _: The control event object.
         """
-        self.edit_name_field.value = str(self.display_task.label)  # type: ignore (Bad library typing)
+        self.edit_name_field.value = str(self.display_task.label)  # type: ignore[reportUnknownMemberType] (Bad library typing)
         self.edit_name_field.focus()
         self.display_view.visible = False
         self.edit_view.visible = True

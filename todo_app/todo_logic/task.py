@@ -1,27 +1,10 @@
-"""Module containing Task class and TaskDict type definition."""
+"""Module containing Task class definition."""
 
 from datetime import datetime
-from typing import TypedDict, override
+from typing import override
 from uuid import uuid4
 
-
-class TaskDict(TypedDict):
-    """Type definition for a dictionary representing a task."""
-
-    name: str
-    """The name of the task."""
-
-    description: str | None
-    """The description of the task, or None if not provided."""
-
-    due_date: datetime | None
-    """The due date of the task, or None if not specified."""
-
-    task_id: str
-    """The unique identifier of the task."""
-
-    is_complete: bool
-    """The completion status of the task."""
+from .task_dict import TaskDict
 
 
 class Task:
@@ -180,14 +163,28 @@ class Task:
 
     @override
     def __eq__(self, value: object) -> bool:
+        """Override the equality comparison method.
+
+        :param value: Another object to compare with.
+        :return: True if two objects have the same task_id, else False.
+        """
         if not isinstance(value, type(self)):
             return False
         return self.task_id == value.task_id
 
     @override
     def __ne__(self, value: object) -> bool:
+        """Override the inequality comparison method.
+
+        :param value: Another object to compare with.
+        :return: True if two objects do not have the same task_id, else False.
+        """
         return not self.__eq__(value)
 
     @override
     def __hash__(self) -> int:
+        """Override the hashing method.
+
+        :return: Hash value based on the task_id of the object.
+        """
         return hash(self.task_id)

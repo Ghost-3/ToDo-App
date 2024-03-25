@@ -1,6 +1,6 @@
 """Module for creating and running the ToDo application."""
 
-from flet import CrossAxisAlignment, Page, app  # type: ignore (Bad library typing)
+from flet import CrossAxisAlignment, Page, app  # type: ignore[reportUnknownVariableType] (Bad library typing)
 
 from .todo_app import TodoApp
 
@@ -16,9 +16,9 @@ class App:
         """
         page.title = "ToDo App"
         page.horizontal_alignment = CrossAxisAlignment.CENTER
-        page.update()  # type: ignore (Bad library typing)
-        page.add(TodoApp())  # type: ignore (Bad library typing)
+        page.update()  # type: ignore[reportUnknownMemberType] (Bad library typing)
+        page.add(TodoApp())  # type: ignore[reportUnknownMemberType] (Bad library typing)
 
     def run(self) -> None:
         """Run the main application."""
-        app(target=self.main)
+        _ = app(target=self.main)

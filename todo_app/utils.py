@@ -26,5 +26,5 @@ class Utils:
         :return: The filter status if valid, otherwise None.
         """
         if isinstance(status, str) and status in {"all", "active", "completed"}:
-            return FilterStatus.from_str(status)  # type: ignore (The string has been verified)
+            return FilterStatus.from_str(status)  # type: ignore[reportArgumentType] (The string has been verified)
         return None

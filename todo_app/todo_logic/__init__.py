@@ -3,5 +3,6 @@
 This module includes classes such as Task and TaskManager for handling tasks and task management.
 """
 
-from .task import Task, TaskDict
+from .task import Task
+from .task_dict import TaskDict
 from .task_manager import TaskManager

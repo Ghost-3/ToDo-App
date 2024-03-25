@@ -12,10 +12,10 @@ dev = ["ruff", "basedpyright"]
 # PyRight
 [tool.basedpyright]
 venvPath = ".venv"
+exclude = ["build", ".venv"]
 typeCheckingMode = "all"
 reportUnusedImport = "none"     # Ruff
 reportMissingSuperCall = "none"
-reportUnusedCallResult = "none"
 reportMissingTypeStubs = "none"
 
 # Ruff

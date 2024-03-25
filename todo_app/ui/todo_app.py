@@ -14,7 +14,8 @@ from flet import (
     icons,
 )
 
-from todo_app.todo_logic import Task, TaskManager
+from todo_app.todo_logic.task import Task
+from todo_app.todo_logic.task_manager import TaskManager
 from todo_app.utils import Utils
 
 from .filter_status import FilterStatus
@@ -27,7 +28,7 @@ class TodoApp(UserControl):
 
     def __init__(self) -> None:
         """Initialize a new instance of TodoApp."""
-        super().__init__()  # type: ignore (Bad library typing)
+        super().__init__()  # type: ignore[reportUnknownMemberType] (Bad library typing)
         self.new_task_field = TextField(hint_text="Whats needs to be done?", expand=True, autofocus=True)
         self.add_task_button = FloatingActionButton(icon=icons.ADD, on_click=self.add_clicked)
         self.task_list = Column()
@@ -55,7 +56,7 @@ class TodoApp(UserControl):
             self.task_list.controls.append(task_ui)
 
     @override
-    def build(self) -> Column:  # type: ignore (Bad library typing)
+    def build(self) -> Column:  # type: ignore[reportIncompatibleMethodOverride] (Bad library typing)
         """Build the UI layout for the component.
 
         :return: The column layout with UI controls.
@@ -89,7 +90,7 @@ class TodoApp(UserControl):
             return
         filter_index = self.filter.selected_index if self.filter.selected_index else 0
         status = Utils.get_filter_status(
-            tabs[filter_index].text,  # type: ignore (Bad library typing)
+            tabs[filter_index].text,  # type: ignore[reportUnknownMemberType] (Bad library typing)
         )
         for task_ui in self.task_list.controls:
             if not isinstance(task_ui, TaskUi):
@@ -113,10 +114,10 @@ class TodoApp(UserControl):
             Task(self.new_task_field.value),
             self.on_task_event,
         )
-        self.task_list.controls.append(task_ui)
-        self.new_task_field.value = ""
-        self.task_manager.add_task(task_ui.task)
-        self.update()
+        if self.task_manager.add_task(task_ui.task):
+            self.task_list.controls.append(task_ui)
+            self.new_task_field.value = ""
+            self.update()
 
     def on_task_event(self, task_event: TaskEvent, task_ui: TaskUi) -> None:
         """Handle a task event by modifying tasks in the TaskManager and updating the UI.
@@ -127,13 +128,15 @@ class TodoApp(UserControl):
         task = task_ui.task
         match task_event:
             case TaskEvent.RENAME:
-                self.task_manager.modify_task(task.task_id, name=task.name)
+                result = self.task_manager.modify_task(task.task_id, name=task.name)
             case TaskEvent.SWITCH_COMPLETE:
-                self.task_manager.modify_task(task.task_id, is_complete=task.is_complete)
+                result = self.task_manager.modify_task(task.task_id, is_complete=task.is_complete)
             case TaskEvent.DELETE:
-                self.task_manager.delete_task(task.task_id)
-                self.task_list.controls.remove(task_ui)
-        self.update()
+                result = self.task_manager.delete_task(task.task_id)
+                if result:
+                    self.task_list.controls.remove(task_ui)
+        if result:
+            self.update()
 
     def tabs_changed(self, _: ControlEvent) -> None:
         """Handle the event when filter tab are changed.
