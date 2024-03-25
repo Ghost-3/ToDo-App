@@ -3,15 +3,7 @@
 from typing import override
 
 from flet import (
-    Column,
     ControlEvent,
-    FloatingActionButton,
-    Row,
-    Tab,
-    Tabs,
-    TextField,
-    UserControl,
-    icons,
 )
 
 from todo_app.todo_logic.task import Task
@@ -29,20 +21,20 @@ class TodoAppControl(TodoAppUi):
     def __init__(self) -> None:
         """Initialize a new instance of TodoApp."""
         super().__init__()
-        self.add_task_button.on_click = self.add_clicked
-        self.filter.on_change = self.tabs_changed
+        self.add_task_button.on_click = self._on_add_click
+        self.filter.on_change = self._on_tab_change
 
         self.task_manager = TaskManager()
-        self.load_tasks()
+        self._load_tasks()
 
-    def load_tasks(self) -> None:
+    def _load_tasks(self) -> None:
         """Load tasks from a file during initialization.
 
         This method loads tasks using the TaskManager and creates TaskUi objects for each task to update the UI.
         """
         self.task_manager.load_tasks()
         for task in self.task_manager.tasks:
-            task_ui = TaskControl(task, self.on_task_event)
+            task_ui = TaskControl(task, self._on_task_event)
             self.task_list.controls.append(task_ui)
 
     @override
@@ -71,7 +63,7 @@ class TodoAppControl(TodoAppUi):
 
         super().update()
 
-    def add_clicked(self, _: ControlEvent) -> None:
+    def _on_add_click(self, _: ControlEvent) -> None:
         """Handle the click event when the add button is clicked.
 
         :param _: The control event object.
@@ -80,14 +72,14 @@ class TodoAppControl(TodoAppUi):
             return
         task_ui = TaskControl(
             Task(self.new_task_field.value),
-            self.on_task_event,
+            self._on_task_event,
         )
         if self.task_manager.add_task(task_ui.task):
             self.task_list.controls.append(task_ui)
             self.new_task_field.value = ""
             self.update()
 
-    def on_task_event(self, task_event: TaskEvent, task_ui: TaskControl) -> None:
+    def _on_task_event(self, task_event: TaskEvent, task_ui: TaskControl) -> None:
         """Handle a task event by modifying tasks in the TaskManager and updating the UI.
 
         :param task_event: The TaskEvent that occurred for the task.
@@ -112,7 +104,7 @@ class TodoAppControl(TodoAppUi):
         if result:
             self.update()
 
-    def tabs_changed(self, _: ControlEvent) -> None:
+    def _on_tab_change(self, _: ControlEvent) -> None:
         """Handle the event when filter tab are changed.
 
         :param _: The control event object.

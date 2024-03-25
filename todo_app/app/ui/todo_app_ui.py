@@ -1,3 +1,5 @@
+"""Module contains a class representing a user interface for a todo application."""
+
 from typing import override
 
 from flet import (
@@ -13,7 +15,10 @@ from flet import (
 
 
 class TodoAppUi(UserControl):
+    """A user interface control that displays tasks and allows users to interact with them."""
+
     def __init__(self) -> None:
+        """Initialize UI elements such as text fields, buttons, and task lists."""
         super().__init__()  # type: ignore[reportUnknownMemberType] (Bad library typing)
         self.new_task_field = TextField(hint_text="Whats needs to be done?", expand=True, autofocus=True)
         self.add_task_button = FloatingActionButton(icon=icons.ADD)

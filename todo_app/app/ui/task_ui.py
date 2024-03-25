@@ -1,3 +1,5 @@
+"""Module contains a class TaskUi that represents a user interface for managing tasks."""
+
 from typing import override
 
 from flet import (
@@ -24,7 +26,10 @@ from flet import (
 
 
 class TaskUi(UserControl):
+    """A class representing a user interface for managing tasks."""
+
     def __init__(self) -> None:
+        """Initialize the TaskUi object with necessary display and edit elements."""
         super().__init__()  # type: ignore[reportUnknownMemberType] (Bad library typing)
         # Display elements
         # Task name & complete checkbox
@@ -61,6 +66,7 @@ class TaskUi(UserControl):
         self._set_edit_view()
 
     def _set_display_elements(self) -> None:
+        """Set up display elements for viewing tasks."""
         # Task name & complete checkbox
         self._display_task = Checkbox()
 
@@ -107,6 +113,7 @@ class TaskUi(UserControl):
         )
 
     def _set_edit_elements(self) -> None:
+        """Set up edit elements for modifying task details."""
         self._edit_name_field = TextField(label="Name", expand=1)
         self._edit_description_field = TextField(label="Description", multiline=True)
         self._date_picker = DatePicker()
@@ -122,42 +129,8 @@ class TaskUi(UserControl):
             icon=icons.ACCESS_TIME,
         )
 
-    def _set_edit_view(self) -> None:
-        self._save_btn = IconButton(
-            icon=icons.DONE_OUTLINE_OUTLINED,
-            icon_color=colors.GREEN,
-            tooltip="Update To-Do",
-        )
-
-        edit_name_row = Row(
-            alignment=MainAxisAlignment.SPACE_BETWEEN,
-            vertical_alignment=CrossAxisAlignment.CENTER,
-            controls=[
-                self._edit_name_field,
-                self._save_btn,
-            ],
-        )
-
-        pick_buttons_row = Row(
-            offset=Offset(0, -0.5),
-            controls=[
-                self._date_picker_btn,
-                self._time_picker_btn,
-            ],
-        )
-
-        self._edit_view = Column(
-            visible=False,
-            controls=[
-                edit_name_row,
-                self._edit_description_field,
-                self._date_picker,
-                self._time_picker,
-                pick_buttons_row,
-            ],
-        )
-
     def _set_display_view(self) -> None:
+        """Set the display view layout for showing task information."""
         self._edit_task_btn = IconButton(
             icon=icons.CREATE_OUTLINED,
             tooltip="Edit task",
@@ -203,6 +176,42 @@ class TaskUi(UserControl):
             controls=[
                 task_row,
                 indicator_container,
+            ],
+        )
+
+    def _set_edit_view(self) -> None:
+        """Set the edit view layout for editing task details."""
+        self._save_btn = IconButton(
+            icon=icons.DONE_OUTLINE_OUTLINED,
+            icon_color=colors.GREEN,
+            tooltip="Update To-Do",
+        )
+
+        edit_name_row = Row(
+            alignment=MainAxisAlignment.SPACE_BETWEEN,
+            vertical_alignment=CrossAxisAlignment.CENTER,
+            controls=[
+                self._edit_name_field,
+                self._save_btn,
+            ],
+        )
+
+        pick_buttons_row = Row(
+            offset=Offset(0, -0.5),
+            controls=[
+                self._date_picker_btn,
+                self._time_picker_btn,
+            ],
+        )
+
+        self._edit_view = Column(
+            visible=False,
+            controls=[
+                edit_name_row,
+                self._edit_description_field,
+                self._date_picker,
+                self._time_picker,
+                pick_buttons_row,
             ],
         )
 

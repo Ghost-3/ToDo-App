@@ -5,7 +5,6 @@ from datetime import date, datetime, time
 from typing import override
 
 from flet import (
-    Column,
     ControlEvent,
     icons,
 )
@@ -62,6 +61,10 @@ class TaskControl(TaskUi):
 
     @override
     def update(self) -> None:
+        """Update the task information and indicators.
+
+        This method updates the description, date, and time of the task.
+        """
         self._description_indicator.visible = self._task.description is not None
 
         self._update_date()
@@ -70,6 +73,10 @@ class TaskControl(TaskUi):
         super().update()
 
     def _update_date(self) -> None:
+        """Update the date information for the task.
+
+        This method updates the due date text, icon, and visibility indicator.
+        """
         if due_date := self._task.due_date:
             self._date_picker_btn.text = due_date.isoformat()
             self._date_picker_btn.icon = icons.CANCEL_OUTLINED
@@ -81,6 +88,10 @@ class TaskControl(TaskUi):
             self._date_indicator.visible = False
 
     def _update_time(self) -> None:
+        """Update the time information for the task.
+
+        This method updates the due time text, icon, and visibility indicator.
+        """
         if due_time := self._task.due_time:
             self._time_picker_btn.text = due_time.isoformat()[:5]
             self._time_picker_btn.icon = icons.CANCEL_OUTLINED
