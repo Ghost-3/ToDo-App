@@ -1,6 +1,6 @@
 """Module containing TaskDict type definition."""
 
-from datetime import datetime
+from datetime import date, time
 from typing import TypedDict
 
 
@@ -13,8 +13,11 @@ class TaskDict(TypedDict):
     description: str | None
     """The description of the task, or None if not provided."""
 
-    due_date: datetime | None
+    due_date: date | None
     """The due date of the task, or None if not specified."""
+
+    due_time: time | None
+    """The due time of the task, or None if not specified."""
 
     task_id: str
     """The unique identifier of the task."""
