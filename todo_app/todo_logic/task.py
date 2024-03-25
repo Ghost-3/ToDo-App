@@ -10,7 +10,7 @@ from .task_dict import TaskDict
 class Task:
     """Class representing a task with properties."""
 
-    def __init__(  # noqa: PLR0913 (There are actually 5 args)
+    def __init__(  # noqa: PLR0913
         self,
         name: str,
         *,

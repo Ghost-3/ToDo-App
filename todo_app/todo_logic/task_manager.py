@@ -69,7 +69,7 @@ class TaskManager:
         self.save_tasks()
         return True
 
-    def modify_task(  # noqa: PLR0913 (There are actually 5 args)
+    def modify_task(  # noqa: PLR0913
         self,
         task_id: str,
         *,
