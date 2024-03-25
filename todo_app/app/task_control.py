@@ -48,7 +48,7 @@ class TaskControl(TaskUi):
         self._date_picker.on_change = self._on_pick_date
         self._time_picker.on_change = self._on_pick_time
         self._date_picker_btn.on_click = self._on_open_date_picker
-        self._date_picker_btn.on_click = self._on_open_time_picker
+        self._time_picker_btn.on_click = self._on_open_time_picker
         self._save_btn.on_click = self._on_save_click
 
     @property
