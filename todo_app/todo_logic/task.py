@@ -1,6 +1,6 @@
 """Module containing Task class definition."""
 
-from datetime import datetime
+from datetime import date, time
 from typing import override
 from uuid import uuid4
 
@@ -15,7 +15,8 @@ class Task:
         name: str,
         *,
         description: str | None = None,
-        due_date: datetime | None = None,
+        due_date: date | None = None,
+        due_time: time | None = None,
         task_id: str | None = None,
         is_complete: bool = False,
     ) -> None:
@@ -29,13 +30,15 @@ class Task:
         """
         self._name: str
         self._description: str | None
-        self._due_date: datetime | None
+        self._due_date: date | None
+        self._due_time: time | None
         self._is_complete: bool
         self._task_id: str = task_id if task_id else str(uuid4())
 
         self.name = name
         self.description = description
         self.due_date = due_date
+        self.due_time = due_time
         self.is_complete = is_complete
 
     @classmethod
@@ -57,6 +60,7 @@ class Task:
             "name": self._name,
             "description": self._description,
             "due_date": self._due_date,
+            "due_time": self._due_time,
             "task_id": self._task_id,
             "is_complete": self._is_complete,
         }
@@ -115,7 +119,7 @@ class Task:
         self._description = value
 
     @property
-    def due_date(self) -> datetime | None:
+    def due_date(self) -> date | None:
         """Get the due date of the task.
 
         :return: The due date of the task, or None if not set.
@@ -123,12 +127,28 @@ class Task:
         return self._due_date
 
     @due_date.setter
-    def due_date(self, value: datetime | None) -> None:
+    def due_date(self, value: date | None) -> None:
         """Set the due date of the task.
 
         :param value: The new due date for the task.
         """
         self._due_date = value
+
+    @property
+    def due_time(self) -> time | None:
+        """Get the due time of the task.
+
+        :return: The due time of the task, or None if not set.
+        """
+        return self._due_time
+
+    @due_time.setter
+    def due_time(self, value: time | None) -> None:
+        """Set the due date of the task.
+
+        :param value: The new due date for the task.
+        """
+        self._due_time = value
 
     @property
     def is_complete(self) -> bool:

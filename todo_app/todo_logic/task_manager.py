@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 from .task import Task
 
 if TYPE_CHECKING:
-    from datetime import datetime
+    from datetime import date, time
     from os import PathLike
 
     from .task_dict import TaskDict
@@ -75,7 +75,8 @@ class TaskManager:
         *,
         name: str | None = None,
         description: str | None = None,
-        due_date: datetime | None = None,
+        due_date: date | None = None,
+        due_time: time | None = None,
         is_complete: bool | None = None,
     ) -> bool:
         """Modify the attributes of a task.
@@ -95,6 +96,8 @@ class TaskManager:
                 task.description = description
             if due_date is not None:
                 task.due_date = due_date
+            if due_time is not None:
+                task.due_time = due_time
             if is_complete is not None:
                 task.is_complete = is_complete
             self._tasks[task_id] = task
