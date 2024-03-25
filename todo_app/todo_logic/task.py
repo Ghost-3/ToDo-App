@@ -15,8 +15,8 @@ class Task:
         name: str,
         *,
         description: str | None = None,
-        due_date: date | None = None,
-        due_time: time | None = None,
+        due_date: date | str | None = None,
+        due_time: time | str | None = None,
         task_id: str | None = None,
         is_complete: bool = False,
     ) -> None:
@@ -34,6 +34,11 @@ class Task:
         self._due_time: time | None
         self._is_complete: bool
         self._task_id: str = task_id if task_id else str(uuid4())
+
+        if isinstance(due_date, str):
+            due_date = date.fromisoformat(due_date)
+        if isinstance(due_time, str):
+            due_time = time.fromisoformat(due_time)
 
         self.name = name
         self.description = description
@@ -59,8 +64,8 @@ class Task:
         return {
             "name": self._name,
             "description": self._description,
-            "due_date": self._due_date,
-            "due_time": self._due_time,
+            "due_date": self._due_date.isoformat() if self._due_date else None,
+            "due_time": self._due_time.isoformat() if self._due_time else None,
             "task_id": self._task_id,
             "is_complete": self._is_complete,
         }

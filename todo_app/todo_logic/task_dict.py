@@ -13,10 +13,10 @@ class TaskDict(TypedDict):
     description: str | None
     """The description of the task, or None if not provided."""
 
-    due_date: date | None
+    due_date: str | None
     """The due date of the task, or None if not specified."""
 
-    due_time: time | None
+    due_time: str | None
     """The due time of the task, or None if not specified."""
 
     task_id: str
