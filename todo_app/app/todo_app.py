@@ -16,32 +16,22 @@ from flet import (
 
 from todo_app.todo_logic.task import Task
 from todo_app.todo_logic.task_manager import TaskManager
-from todo_app.utils import Utils
 
 from .filter_status import FilterStatus
+from .task_control import TaskControl
 from .task_event import TaskEvent
-from .task_ui import TaskUi
+from .ui.todo_app_ui import TodoAppUi
 
 
-class TodoApp(UserControl):
+class TodoAppControl(TodoAppUi):
     """A class representing a Todo App user control."""
 
     def __init__(self) -> None:
         """Initialize a new instance of TodoApp."""
-        super().__init__()  # type: ignore[reportUnknownMemberType] (Bad library typing)
-        self.new_task_field = TextField(hint_text="Whats needs to be done?", expand=True, autofocus=True)
-        self.add_task_button = FloatingActionButton(icon=icons.ADD, on_click=self.add_clicked)
-        self.task_list = Column()
+        super().__init__()
+        self.add_task_button.on_click = self.add_clicked
+        self.filter.on_change = self.tabs_changed
 
-        self.filter = Tabs(
-            selected_index=0,
-            on_change=self.tabs_changed,
-            tabs=[
-                Tab(text="all"),
-                Tab(text="active"),
-                Tab(text="completed"),
-            ],
-        )
         self.task_manager = TaskManager()
         self.load_tasks()
 
@@ -52,33 +42,8 @@ class TodoApp(UserControl):
         """
         self.task_manager.load_tasks()
         for task in self.task_manager.tasks:
-            task_ui = TaskUi(task, self.on_task_event)
+            task_ui = TaskControl(task, self.on_task_event)
             self.task_list.controls.append(task_ui)
-
-    @override
-    def build(self) -> Column:  # type: ignore[reportIncompatibleMethodOverride] (Bad library typing)
-        """Build the UI layout for the component.
-
-        :return: The column layout with UI controls.
-        """
-        return Column(
-            width=600,
-            controls=[
-                Row(
-                    controls=[
-                        self.new_task_field,
-                        self.add_task_button,
-                    ],
-                ),
-                Column(
-                    spacing=25,
-                    controls=[
-                        self.filter,
-                        self.task_list,
-                    ],
-                ),
-            ],
-        )
 
     @override
     def update(self) -> None:
@@ -89,11 +54,14 @@ class TodoApp(UserControl):
         if not (tabs := self.filter.tabs):
             return
         filter_index = self.filter.selected_index if self.filter.selected_index else 0
-        status = Utils.get_filter_status(
-            tabs[filter_index].text,  # type: ignore[reportUnknownMemberType] (Bad library typing)
-        )
+
+        if isinstance(status := tabs[filter_index].text, str) and status in {"all", "active", "completed"}:  # type: ignore[reportUnknownMemberType] (Bad library typing)
+            status = FilterStatus.from_str(status)  # type: ignore[reportArgumentType] (The string has been verified)
+        else:
+            return
+
         for task_ui in self.task_list.controls:
-            if not isinstance(task_ui, TaskUi):
+            if not isinstance(task_ui, TaskControl):
                 continue
             task_ui.visible = (
                 status == FilterStatus.ALL
@@ -110,7 +78,7 @@ class TodoApp(UserControl):
         """
         if not self.new_task_field.value:
             return
-        task_ui = TaskUi(
+        task_ui = TaskControl(
             Task(self.new_task_field.value),
             self.on_task_event,
         )
@@ -119,7 +87,7 @@ class TodoApp(UserControl):
             self.new_task_field.value = ""
             self.update()
 
-    def on_task_event(self, task_event: TaskEvent, task_ui: TaskUi) -> None:
+    def on_task_event(self, task_event: TaskEvent, task_ui: TaskControl) -> None:
         """Handle a task event by modifying tasks in the TaskManager and updating the UI.
 
         :param task_event: The TaskEvent that occurred for the task.
@@ -127,8 +95,14 @@ class TodoApp(UserControl):
         """
         task = task_ui.task
         match task_event:
-            case TaskEvent.RENAME:
-                result = self.task_manager.modify_task(task.task_id, name=task.name)
+            case TaskEvent.MODIFY:
+                result = self.task_manager.modify_task(
+                    task_id=task.task_id,
+                    name=task.name,
+                    description=task.description,
+                    due_date=task.due_date,
+                    due_time=task.due_time,
+                )
             case TaskEvent.SWITCH_COMPLETE:
                 result = self.task_manager.modify_task(task.task_id, is_complete=task.is_complete)
             case TaskEvent.DELETE:

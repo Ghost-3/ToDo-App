@@ -2,7 +2,7 @@
 
 from flet import CrossAxisAlignment, Page, app  # type: ignore[reportUnknownVariableType] (Bad library typing)
 
-from .todo_app import TodoApp
+from .todo_app import TodoAppControl
 
 
 class App:
@@ -17,7 +17,7 @@ class App:
         page.title = "ToDo App"
         page.horizontal_alignment = CrossAxisAlignment.CENTER
         page.update()  # type: ignore[reportUnknownMemberType] (Bad library typing)
-        page.add(TodoApp())  # type: ignore[reportUnknownMemberType] (Bad library typing)
+        page.add(TodoAppControl())  # type: ignore[reportUnknownMemberType] (Bad library typing)
 
     def run(self) -> None:
         """Run the main application."""

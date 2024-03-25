@@ -7,5 +7,5 @@ class TaskEvent(Enum):
     """Enumeration of task events."""
 
     SWITCH_COMPLETE = "switch_complete"
-    RENAME = "rename"
+    MODIFY = "modify"
     DELETE = "delete"
